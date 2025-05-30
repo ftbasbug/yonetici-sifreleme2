@@ -1,1 +1,1 @@
-# yonetici-sifreleme2
+# y-netici-sifreleme

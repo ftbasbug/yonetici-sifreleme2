@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Yönetici Girişi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 320px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 6px;
+    }
+    input {
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Yönetici Giriş</h2>
+    <input type="text" id="login-username" placeholder="Kullanıcı Adı" />
+    <input type="password" id="login-password" placeholder="Şifre" />
+    <button id="login-button" onclick="girisYap()">Giriş Yap</button>
+  </div>
+
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxQcPEYh6_3aRp1xjN5vCtQjiAQbHDwqfUkl_03d46_VkuH-JQOHWYFQEjslqf3rBd3rw/exec';
+
+    function girisYap() {
+      const username = document.getElementById("login-username").value.trim();
+      const password = document.getElementById("login-password").value.trim();
+
+      if (!username || !password) {
+        alert("Lütfen tüm alanları doldurun.");
+        return;
+      }
+
+      fetch(scriptURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          username,
+          password,
+          type: "login"
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          localStorage.setItem("adminLoggedIn", "true");
+          window.location.href = "admin-panel.html";
+        } else {
+          alert("Hatalı kullanıcı adı veya şifre.");
+        }
+      })
+      .catch(() => alert("Bir hata oluştu."));
+    }
+
+    // Enter tuşuna basıldığında giriş fonksiyonunu çalıştır
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        girisYap();
+      }
+    });
+  </script>
+</body>
+</html>
